@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Panier - boutique d'habillement</title>
+    <style>
+        /* --- DESIGN GLOBAL --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        header {
+            background-color: #3b5998;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        header h1 { margin: 0; font-size: 24px; }
+        nav ul {
+            list-style-type: none;
+            display: flex;
+            gap: 20px;
+            padding: 0;
+            margin: 0;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        nav ul li a:hover { color: #ffcc00; background: rgba(255,255,255,0.1); }
+
+        .conteneur-panier {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h2 { color: #3b5998; margin-top: 0; }
+
+        /* --- TABLEAU --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th { background-color: #f8f9fa; color: #555; }
+        
+        .btn-action {
+            padding: 5px 10px;
+            margin: 0 2px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-plus { background-color: #2ee712; color: white; }
+        .btn-moins { background-color: #ffcc00; color: #333; }
+        .btn-supprimer { background-color: #dc3545; color: white; }
+
+        /* --- SECTION PRODUITS RECOMMANDÉS --- */
+        .section-recommandations {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            text-align: left;
+            border: 1px dashed #ced4da;
+        }
+        .section-recommandations h3 {
+            margin-top: 0;
+            font-size: 16px;
+            color: #444;
+        }
+        .grille-recommandations {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .item-recommande {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex: 1;
+            min-width: 220px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .infos-recommande {
+            font-size: 14px;
+        }
+        .infos-recommande span {
+            display: block;
+            font-weight: bold;
+            color: #3b5998;
+        }
+        .btn-ajouter-rec {
+            background-color: #3b5998;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        .btn-ajouter-rec:hover {
+            background-color: #2a4473;
+        }
+
+        /* --- ZONE CALCULS ET TOTAL --- */
+        .zone-calculs {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px dashed #ddd;
+            text-align: right;
+        }
+        .select-livraison {
+            padding: 10px;
+            font-size: 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            width: 250px;
+            font-family: inherit;
+        }
+        .ligne-prix {
+            font-size: 16px;
+            margin: 8px 0;
+            color: #666;
+        }
+        .total-general {
+            font-size: 22px;
+            font-weight: bold;
+            color: #3b5998;
+            margin-top: 10px;
+        }
+
+        /* --- BOUTON DE COMMANDE --- */
+        .btn-commander {
+            display: inline-block;
+            background-color: #25D366;
+            color: white;
+            text-decoration: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 30px;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-commander:hover { background-color: #1ebd56; transform: translateY(-2px); }
+        .panier-vide { font-size: 18px; color: #777; margin: 40px 0; }
+
+        /* --- INTEGRATION MODE SOMBRE --- */
+        body.dark-mode { background-color: #121212; color: #f4f6f9; }
+        body.dark-mode header { background-color: #1f1f1f; }
+        body.dark-mode .conteneur-panier { background: #1e1e1e; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        body.dark-mode h2, body.dark-mode .total-general { color: #8ab4f8; }
+        body.dark-mode th { background-color: #2d2d2d; color: #ddd; }
+        body.dark-mode td { border-bottom-color: #333; }
+        body.dark-mode .select-livraison { background: #2d2d2d; color: white; border-color: #444; }
+        body.dark-mode .ligne-prix { color: #aaa; }
+        body.dark-mode .section-recommandations { background-color: #252525; border-color: #444; }
+        body.dark-mode .section-recommandations h3 { color: #ccc; }
+        body.dark-mode .item-recommande { background: #1f1f1f; border-color: #333; }
+        body.dark-mode .infos-recommande span { color: #8ab4f8; }
+        body.dark-mode .btn-ajouter-rec { background-color: #8ab4f8; color: #121212; }
+        body.dark-mode .btn-ajouter-rec:hover { background-color: #aecbfa; }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <h1>Maison la maman de MAF</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="index.html#liste-articles">Nos produits</a></li>
+                <li><a href="resultat.html" style="color: #ffcc00;">Mon panier</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="conteneur-panier">
+        <h2><i class="fas fa-shopping-cart"></i> Votre Panier</h2>
+        
+        <div id="contenuPanier">
+            </div>
+    </div>
+
+    <script>
+        const TARIFS_LIVRAISON = {
+            "maison": 000,
+            "matete": 3000,
+            "lemba": 5000,
+            "ngaliema": 20000,
+            "gombe": 20000,
+            "limete": 10000,
+            "masina": 5000,
+            "maluku": 30000,
+            "autre": 10000
+        };
+
+        function chargerPanier() {
+            let panier = JSON.parse(localStorage.getItem("monPanier")) || [];
+            let conteneur = document.getElementById("contenuPanier");
+
+            if (panier.length === 0) {
+                conteneur.innerHTML = "<p class='panier-vide'>Votre panier est vide pour le moment.</p>";
+                return;
+            }
+
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Article</th>
+                            <th>Prix Unit.</th>
+                            <th>Quantité</th>
+                            <th>Total</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            let sousTotal = 0;
+
+            panier.forEach((item, index) => {
+                let totalArticle = item.pri * item.quantite;
+                sousTotal += totalArticle;
+
+                html += `
+                    <tr>
+                        <td><strong>${item.article}</strong></td>
+                        <td>${item.pri} FC</td>
+                        <td>${item.quantite}</td>
+                        <td><strong>${totalArticle} FC</strong></td>
+                        <td>
+                            <button class="btn-action btn-plus" onclick="modifierQuantite(${index}, 1)">+</button>
+                            <button class="btn-action btn-moins" onclick="modifierQuantite(${index}, -1)">-</button>
+                            <button class="btn-action btn-supprimer" onclick="supprimerArticle(${index})"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+
+                <div class="section-recommandations">
+                    <h3>💡 Souvent acheté ensemble :</h3>
+                    <div class="grille-recommandations">
+                        <div class="item-recommande">
+                            <div class="infos-recommande">🛍️ Sac de glaçons <span>500 FC</span></div>
+                            <button class="btn-ajouter-rec" onclick="ajouterDepuisRecommandations('Sac de glaçons', 500)">+ Ajouter</button>
+                        </div>
+                        <div class="item-recommande">
+                            <div class="infos-recommande">🥤 Paquet de pailles <span>1000 FC</span></div>
+                            <button class="btn-ajouter-rec" onclick="ajouterDepuisRecommandations('Paquet de pailles', 1000)">+ Ajouter</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="zone-calculs">
+                    <div class="ligne-prix">
+                        <label for="choixZone"><strong>Lieu de livraison :</strong></label><br>
+                        <select id="choixZone" class="select-livraison" onchange="recalculerTotal()">
+                            <option value="maison">Maison/MAF (000 FC)</option>
+                            <option value="matete">Matete (3000 FC)</option>
+                            <option value="lemba">lemba (5000 FC)</option>
+                            <option value="ngaliema">Ngaliema / UPN (20000 FC)</option>
+                            <option value="limete">Limete (10000 FC)</option>
+                            <option value="gombe">Gombe (20000 FC)</option>
+                            <option value="masina">Masina (5000 FC)</option>
+                            <option value="maluku">Maluku (30000 FC)</option>
+                            <option value="autre">Autre commune (10000 FC)</option>
+                        </select>
+                    </div>
+                    <div class="ligne-prix">Sous-total produits : <span id="valeurSousTotal">${sousTotal}</span> FC</div>
+                    <div class="ligne-prix">Frais de livraison : <span id="valeurLivraison">2000</span> FC</div>
+                    <div class="total-general">Total Général : <span id="valeurTotalGeneral">${sousTotal + 2000}</span> FC</div>
+                    <p> <strong> Consigne :</strong> Veillez contacter la maman de MAF pour lui préciser l'adresse au cas de livraison, surtout nous blié pas de nous communiquer le numéro (ou la taille) au quel(le) vous porté. merci pour la compréhension</p>
+                    <button class="btn-commander" onclick="envoyerCommandeWhatsApp()">
+                        <i class="fab fa-whatsapp"></i> Envoyer la commande sur WhatsApp
+                    </button>
+                </div>
+            `;
+
+            conteneur.innerHTML = html;
+            recalculerTotal();
+        }
+
+        function ajouterDepuisRecommandations(nom, prix) {
+            let panier = JSON.parse(localStorage.getItem("monPanier")) || [];
+            let articleExistant = panier.find(item => item.article === nom);
+
+            if (articleExistant) {
+                articleExistant.quantite += 1;
+            } else {
+                panier.push({ article: nom, pri: prix, quantite: 1 });
+            }
+            
+            localStorage.setItem("monPanier", JSON.stringify(panier));
+            chargerPanier();
+        }
+
+        function modifierQuantite(index, changement) {
+            let panier = JSON.parse(localStorage.getItem("monPanier")) || [];
+            panier[index].quantite += changement;
+
+            if (panier[index].quantite <= 0) {
+                panier.splice(index, 1);
+            }
+
+            localStorage.setItem("monPanier", JSON.stringify(panier));
+            chargerPanier();
+        }
+
+        function supprimerArticle(index) {
+            let panier = JSON.parse(localStorage.getItem("monPanier")) || [];
+            panier.splice(index, 1);
+            localStorage.setItem("monPanier", JSON.stringify(panier));
+            chargerPanier();
+        }
+
+        function recalculerTotal() {
+            let panier = JSON.parse(localStorage.getItem("monPanier")) || [];
+            let sousTotal = panier.reduce((sum, item) => sum + (item.pri * item.quantite), 0);
+            
+            let zoneSelect = document.getElementById("choixZone");
+            let fraisLivraison = zoneSelect ? TARIFS_LIVRAISON[zoneSelect.value] : 0;
+            
+            let totalGeneral = sousTotal + fraisLivraison;
+
+            if(document.getElementById("valeurSousTotal")) {
+                document.getElementById("valeurSousTotal").innerText = sousTotal;
+                document.getElementById("valeurLivraison").innerText = fraisLivraison;
+                document.getElementById("valeurTotalGeneral").innerText = totalGeneral;
+            }
+        }
+
+        function envoyerCommandeWhatsApp() {
+            let panier = JSON.parse(localStorage.getItem("monPanier")) || [];
+            if (panier.length === 0) return;
+
+            let zoneSelect = document.getElementById("choixZone");
+            let nomZone = zoneSelect.options[zoneSelect.selectedIndex].text.split(" (")[0];
+            let fraisLivraison = TARIFS_LIVRAISON[zoneSelect.value];
+            
+            let texteWhatsApp = `Bonjour La maman de MAF, voici ma commande :\n\n`;
+            let sousTotal = 0;
+
+            panier.forEach(item => {
+                let totalItem = item.pri * item.quantite;
+                sousTotal += totalItem;
+                texteWhatsApp += `▪️ ${item.article} (x${item.quantite}) : ${totalItem} FC\n`;
+            });
+
+            texteWhatsApp += `\n-------------------------\n`;
+            texteWhatsApp += `🛒 Sous-total commande : ${sousTotal} FC\n`;
+            texteWhatsApp += `📍 Livraison (${nomZone}) : ${fraisLivraison} FC\n`;
+            texteWhatsApp += `💰 TOTAL À PAYER : ${sousTotal + fraisLivraison} FC\n\n`;
+            
+            // Les infos Mobile Money automatiques
+            texteWhatsApp += `💳 Pour le règlement par Mobile Money :\n`;
+            texteWhatsApp += `📱 Airtel money : +243 997516805\n`;
+            texteWhatsApp += `📱 M-Pesa (Vodacom) : +243 823 058 738\n\n`;
+            
+            texteWhatsApp += `Merci de confirmer la prise en charge de ma commande !`;
+
+            let urlWhatsApp = "https://wa.me/+243997516805?text=" + encodeURIComponent(texteWhatsApp);
+            window.open(urlWhatsApp, '_blank');
+        }
+
+        // Vérification du thème sombre défini à l'accueil
+        window.onload = function() {
+            let themeSauvegarde = localStorage.getItem("themeBoutique");
+            if (themeSauvegarde === "sombre") {
+                document.body.classList.add("dark-mode");
+            }
+            chargerPanier();
+        };
+    </script>
+</body>
+</html>
