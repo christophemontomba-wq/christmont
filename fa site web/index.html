@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La maman de MAF – Boutique d’habillement</title>
+<style>
+:root{--b:#3b5998;--g:#1e9e3a;--bg:#f4f6fb;--t:#222}
+*{box-sizing:border-box}
+body{margin:0;font-family:Roboto,Arial,sans-serif;background:var(--bg);color:var(--t)}
+header{background:var(--b);color:#fff;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;padding:12px;position:sticky;top:0;z-index:5}
+header img{width:52px;height:52px;border-radius:8px;object-fit:cover}
+.tt{text-align:left}
+header h1{font-size:21px;margin:0}
+.slogan{margin:0;font-size:12px;opacity:.9}
+nav{display:flex;gap:18px;width:100%;justify-content:center}
+nav a{color:#fff;text-decoration:none;font-size:15px}
+section{max-width:1100px;margin:0 auto;padding:20px 14px}
+h2{color:var(--b);text-align:center;margin:10px 0 14px}
+.intro{text-align:center;font-size:16px;line-height:1.55;max-width:680px;margin:0 auto}
+#q{width:100%;padding:12px 18px;border:2px solid #ccd3e6;border-radius:30px;font-size:16px;margin:6px 0 20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.card{background:#fff;border-radius:14px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.08);position:relative;display:flex;flex-direction:column;gap:8px;text-align:center}
+.card img{width:100%;height:260px;object-fit:contain;border-radius:10px;background:#fafafa}
+.badge{position:absolute;top:8px;left:8px;background:#e8590c;color:#fff;font-size:12px;font-weight:700;padding:5px 9px;border-radius:6px}
+.card h3{font-size:16px;margin:4px 0 0}
+.price{color:var(--b);font-weight:700;font-size:20px}
+.note{padding:9px;border:1px solid #ccd3e6;border-radius:8px;font-size:14px;width:100%}
+button{border:0;border-radius:8px;padding:11px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;width:100%}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #f0a500;outline-offset:2px}
+.add{background:var(--b)}
+.wa{background:var(--g)}
+.clr{background:#8a8fa3;margin-top:8px}
+#none{text-align:center;color:#666}
+#cart{background:#fff;border-radius:14px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.08);max-width:640px;margin:0 auto}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #eceff6}
+.qty{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.qty button{width:32px;padding:5px;background:#e6e9f2;color:#222}
+.total{text-align:right;font-size:19px;font-weight:700;color:var(--b);padding:12px 0}
+.info{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.info div{background:#fff;border-radius:12px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.info h3{margin:0 0 6px;color:var(--b);font-size:17px}
+.info p{margin:0;line-height:1.5}
+form{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+form input,form textarea{padding:12px;border:1px solid #ccd3e6;border-radius:8px;font-size:16px;font-family:inherit;width:100%}
+footer{text-align:center;padding:20px 14px 30px;font-size:15px}
+footer a{color:var(--b);font-weight:700}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="rat.png" alt="Logo La maman de MAF">
+  <div class="tt"><h1>La maman de MAF</h1><p class="slogan">L’élégance au nom</p></div>
+  <nav>
+    <a href="#top">Accueil</a>
+    <a href="#produits">Nos produits</a>
+    <a href="#panier">Mon panier (<span id="cnt">0</span>)</a>
+  </nav>
+</header>
+
+<section id="top">
+  <p class="intro">Bienvenue chez La maman de MAF ! Choisissez vos articles, puis commandez en un clic sur WhatsApp. Les prix affichés sont exacts. Une question avant de commander ? Écrivez-nous au numéro en bas de page.</p>
+</section>
+
+<section id="produits">
+  <h2>Découvrez nos produits</h2>
+  <input id="q" type="search" placeholder="Rechercher un produit (ex : robe, polo, sac)" aria-label="Rechercher un produit">
+  <div class="grid" id="grid"></div>
+  <p id="none" hidden>Aucun produit ne correspond à votre recherche. Essayez un autre mot.</p>
+</section>
+
+<section id="panier">
+  <h2>Mon panier</h2>
+  <div id="cart"></div>
+</section>
+
+<section>
+  <h2>Modalités de la boutique</h2>
+  <div class="info">
+    <div><h3>Paiement</h3><p>Mobile Money (M-Pesa, Airtel, Orange) ou cash. Prix exacts en francs congolais (FC).</p></div>
+    <div><h3>Retrait</h3><p>Avenue Anunga 1 A10, Lubefu, Matete, Kinshasa. Gratuit, après confirmation sur WhatsApp.</p></div>
+    <div><h3>Commande</h3><p>Depuis le site, par WhatsApp. Traitement rapide, en quelques minutes.</p></div>
+    <div><h3>Support</h3><p>Tél : +243 997 516 805. Disponible pour tout renseignement avant l’achat.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Contactez-nous</h2>
+  <form id="f">
+    <input id="nom" placeholder="Votre nom" aria-label="Votre nom">
+    <textarea id="msg" rows="4" placeholder="Votre question ou message" aria-label="Votre message"></textarea>
+    <button class="wa" type="submit">Envoyer sur WhatsApp</button>
+    <button class="add" type="button" id="mail">Envoyer par email</button>
+  </form>
+</section>
+
+<footer>
+  <p>Avenue Anunga 1 A10, Lubefu, Matete, Kinshasa<br>WhatsApp : +243 997 516 805<br>Email : <a href="mailto:christophemontomba@gmail.com">christophemontomba@gmail.com</a></p>
+  <p><a href="https://facebook.com/Christophe_busness" target="_blank" rel="noopener">Notre page Facebook</a></p>
+</footer>
+
+<script>
+const WA = "243997516805";
+// [image, nom, prix en FC, étiquette]
+const P = [
+["fa1.jpeg","Robe (A) + chaussures",46000,"Top ventes"],
+["fa9.jpeg","Robe (B)",34500],
+["fab11.jpg","Robe (C)",46000],
+["fa2.jpeg","Veste (A)",80500],
+["fac5.jpg","Veste (B)",80500],
+["fa4.jpeg","Maillot (A)",23000,"Promo / Pack"],
+["fa7.jpeg","Maillot (B)",23000,"Populaire"],
+["fa3.jpeg","Body (A)",23000],
+["fa5.jpeg","Body (B)",23000,"Meilleur prix"],
+["fa6.jpeg","Body (C)",23000],
+["fa8.jpeg","Body (D)",23000],
+["fab1.jpg","Body (E)",23000],
+["fab2.jpg","Body (F)",23000],
+["fab3.jpg","Body (G)",23000],
+["fab4.jpg","Body (H)",23000],
+["fabc.jpeg","Body (I)",23000],
+["fa12.jpeg","Blouse",34500],
+["fa13.jpeg","Singlais (A)",25000],
+["fab7.jpg","Singlais (B)",15000],
+["fab8.jpg","Singlais (C)",15000],
+["fa15.jpg","Sac (A)",57500],
+["fa14.jpeg","Anglaise",25000],
+["fa16.png","Pantalon (A)",23000],
+["fac6.jpg","Pantalon palazzo (B)",23000],
+["fac3.jpg","Jogging (A)",57500],
+["fa17.png","Culotte (A)",23000],
+["fa18.jpeg","Vareuse RDC",34500],
+["fa25.jpg","Vareuse FCB",15000],
+["fa26.jpg","Vareuse RM",15000],
+["fa27.jpg","Vareuse autre club",12000],
+["fa19.jpg","Chemise (A)",23000],
+["fab9.jpg","Chemise (B)",23000],
+["fa10.jpeg","Chemise short (C)",34500],
+["fab10.jpg","Chemise (C)",23000],
+["fac4.jpg","Chemise sans manches (A)",34500],
+["fac1.jpg","Polo (A)",69000],
+["fac2.jpg","Polo (B)",46000],
+["fac7.jpg","Jupe (A)",46000]
+];
+
+const $ = s => document.querySelector(s);
+const fc = n => n.toLocaleString("fr-FR") + " FC";
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const norm = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+const link = t => "https://wa.me/" + WA + "?text=" + encodeURIComponent(t);
+const go = t => window.open(link(t), "_blank");
+
+let cart = [];
+try { cart = JSON.parse(localStorage.getItem("cartMAF")) || []; } catch (e) {}
+const save = () => { try { localStorage.setItem("cartMAF", JSON.stringify(cart)); } catch (e) {} };
+
+function show(txt) {
+  const k = norm(txt || "");
+  const list = P.map((p, i) => [i, p]).filter(([i, p]) => norm(p[1]).includes(k));
+  $("#grid").innerHTML = list.map(([i, p]) =>
+    `<div class="card">${p[3] ? `<span class="badge">${p[3]}</span>` : ""}
+      <img loading="lazy" src="${p[0]}" alt="${p[1]}">
+      <h3>${p[1]}</h3>
+      <div class="price">${fc(p[2])}</div>
+      <input class="note" placeholder="Taille / couleur souhaitée" aria-label="Taille ou couleur">
+      <button class="add" data-a="add" data-i="${i}">Ajouter au panier</button>
+      <button class="wa" data-a="wa" data-i="${i}">Commander sur WhatsApp</button>
+    </div>`).join("");
+  $("#none").hidden = list.length > 0;
+}
+
+function draw() {
+  const n = cart.reduce((s, c) => s + c.q, 0);
+  const total = cart.reduce((s, c) => s + P[c.i][2] * c.q, 0);
+  $("#cnt").textContent = n;
+  $("#cart").innerHTML = cart.length
+    ? cart.map((c, k) => `<div class="row">
+        <div><b>${P[c.i][1]}</b><br><small>${c.n ? esc(c.n) : "Taille / couleur à préciser"}</small></div>
+        <div class="qty"><button data-a="minus" data-k="${k}" aria-label="Retirer un">−</button>${c.q}<button data-a="plus" data-k="${k}" aria-label="Ajouter un">+</button></div>
+        <b>${fc(P[c.i][2] * c.q)}</b></div>`).join("")
+      + `<div class="total">Total : ${fc(total)}</div>
+         <button class="wa" data-a="send">Envoyer la commande sur WhatsApp</button>
+         <button class="clr" data-a="clear">Vider le panier</button>`
+    : "<p>Votre panier est vide. Ajoutez un article depuis la liste.</p>";
+}
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("button[data-a]");
+  if (!b) return;
+  const a = b.dataset.a, i = +b.dataset.i, k = +b.dataset.k;
+  if (a === "add" || a === "wa") {
+    const p = P[i], note = b.parentElement.querySelector(".note").value.trim();
+    if (a === "wa") {
+      go(`Bonjour, je souhaite commander :\n• ${p[1]} – ${fc(p[2])}\nTaille / couleur : ${note || "à préciser"}\nPhoto : ${location.origin}/${p[0]}`);
+    } else {
+      const f = cart.find(c => c.i === i && c.n === note);
+      f ? f.q++ : cart.push({ i, n: note, q: 1 });
+      save(); draw();
+      b.textContent = "Ajouté ✓";
+      setTimeout(() => b.textContent = "Ajouter au panier", 1200);
+    }
+  } else if (a === "plus") { cart[k].q++; save(); draw(); }
+  else if (a === "minus") { cart[k].q--; if (cart[k].q < 1) cart.splice(k, 1); save(); draw(); }
+  else if (a === "clear") { cart = []; save(); draw(); }
+  else if (a === "send") {
+    const lines = cart.map(c => `• ${P[c.i][1]} x${c.q} – ${fc(P[c.i][2] * c.q)}${c.n ? " (" + c.n + ")" : ""}`).join("\n");
+    const total = cart.reduce((s, c) => s + P[c.i][2] * c.q, 0);
+    go(`Bonjour, je souhaite commander :\n${lines}\nTotal : ${fc(total)}`);
+  }
+});
+
+$("#q").addEventListener("input", e => show(e.target.value));
+$("#f").addEventListener("submit", e => {
+  e.preventDefault();
+  go(`Bonjour, je m’appelle ${$("#nom").value || "(nom)"}.\n${$("#msg").value}`);
+});
+
+$("#mail").addEventListener("click", () => {
+  const s = encodeURIComponent("Message depuis le site La maman de MAF");
+  const b = encodeURIComponent(`Bonjour, je m’appelle ${$("#nom").value || "(nom)"}.\n${$("#msg").value}`);
+  location.href = `mailto:christophemontomba@gmail.com?subject=${s}&body=${b}`;
+});
+
+show(""); draw();
+</script>
+</body>
+</html>
